@@ -522,6 +522,17 @@ tm* SC_LocalTime(tm *local, time_t *timer) {
     return rsrLocalTime(rsc, local, timer);
 }
 
+#ifdef TARGET_CPU_VARIANT_ARM11
+uint32_t SC_UptimeMillis() {
+    Context *rsc = RsdCpuReference::getTlsContext();
+    return (uint32_t)rsrUptimeMillis(rsc);
+}
+
+uint32_t SC_UptimeNanos() {
+    Context *rsc = RsdCpuReference::getTlsContext();
+    return (uint32_t)rsrUptimeNanos(rsc);
+}
+#else
 int64_t SC_UptimeMillis() {
     Context *rsc = RsdCpuReference::getTlsContext();
     return rsrUptimeMillis(rsc);
@@ -531,6 +542,7 @@ int64_t SC_UptimeNanos() {
     Context *rsc = RsdCpuReference::getTlsContext();
     return rsrUptimeNanos(rsc);
 }
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // Message routines
@@ -1270,10 +1282,17 @@ rs_tm* rsLocaltime(rs_tm* local, const int *timer) {
     return (rs_tm*)(SC_LocalTime((tm*)local, (long*)timer));
 }
 
-int64_t rsUptimeMillis() {
+#ifdef TARGET_CPU_VARIANT_ARM11
+uint32_t rsUptimeMillis()
+    Context *rsc = RsdCpuReference::getTlsContext();
+    return (uint32_t)rsrUptimeMillis(rsc);
+}
+#else
+int64_t rsUptimeMillis()
     Context *rsc = RsdCpuReference::getTlsContext();
     return rsrUptimeMillis(rsc);
 }
+#endif
 
 uint32_t rsSendToClientBlocking2(int cmdID, void *data, int len) {
     Context *rsc = RsdCpuReference::getTlsContext();

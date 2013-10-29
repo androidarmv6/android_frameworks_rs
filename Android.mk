@@ -6,6 +6,10 @@ ifeq ($(TARGET_BUILD_PDK), true)
   rs_base_CFLAGS += -D__RS_PDK__
 endif
 
+ifeq ($(TARGET_CPU_VARIANT),arm11)
+  rs_base_CFLAGS += -DTARGET_CPU_VARIANT_ARM11
+endif
+
 ifneq ($(OVERRIDE_RS_DRIVER),)
   rs_base_CFLAGS += -DOVERRIDE_RS_DRIVER=$(OVERRIDE_RS_DRIVER)
 endif
