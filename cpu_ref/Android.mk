@@ -54,6 +54,7 @@ ifeq ($(ARCH_ARM_HAVE_NEON),true)
     LOCAL_CFLAGS_arm += -DARCH_ARM_HAVE_NEON
 endif
 
+ifneq ($(TARGET_CPU_VARIANT),arm11)
 ifeq ($(ARCH_ARM_HAVE_VFP),true)
     LOCAL_CFLAGS_arm += -DARCH_ARM_HAVE_VFP -DARCH_ARM_USE_INTRINSICS
     LOCAL_SRC_FILES_arm += \
@@ -65,6 +66,7 @@ ifeq ($(ARCH_ARM_HAVE_VFP),true)
     rsCpuIntrinsics_neon_YuvToRGB.S \
 
     LOCAL_ASFLAGS_arm := -mfpu=neon
+endif
 endif
 
 ifeq ($(ARCH_X86_HAVE_SSSE3),true)
