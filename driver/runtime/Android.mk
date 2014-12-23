@@ -29,8 +29,13 @@ clcore_base_files := \
     rs_sampler.c \
     rs_convert.c
 
+ifeq ($(TARGET_CPU_VARIANT),arm11)
+clcore_base_files_32 := \
+    ll32_arm11/allocation.ll
+else
 clcore_base_files_32 := \
     ll32/allocation.ll
+endif
 
 clcore_base_files_64 := \
     ll64/allocation.ll
@@ -39,9 +44,15 @@ clcore_files := \
     $(clcore_base_files) \
     arch/generic.c
 
+ifeq ($(TARGET_CPU_VARIANT),arm11)
+clcore_files_32 := \
+    $(clcore_base_files_32) \
+    ll32_arm11/math.ll
+else
 clcore_files_32 := \
     $(clcore_base_files_32) \
     ll32/math.ll
+endif
 
 clcore_files_64 := \
     $(clcore_base_files_64) \
@@ -138,7 +149,11 @@ include $(CLEAR_VARS)
 # FIXME for 64-bit
 LOCAL_32_BIT_ONLY := true
 
+ifeq ($(TARGET_CPU_VARIANT),arm11)
+BCC_RS_TRIPLE := armv6-none-linux-gnueabi
+else
 BCC_RS_TRIPLE := armv7-none-linux-gnueabi
+endif
 RS_TRIPLE_CFLAGS :=
 LOCAL_MODULE := librsrt_arm.bc
 LOCAL_IS_HOST_MODULE := true
@@ -151,7 +166,11 @@ include $(CLEAR_VARS)
 # FIXME for 64-bit
 LOCAL_32_BIT_ONLY := true
 
+ifeq ($(TARGET_CPU_VARIANT),arm11)
+BCC_RS_TRIPLE := armv6-none-linux-gnueabi
+else
 BCC_RS_TRIPLE := armv7-none-linux-gnueabi
+endif
 RS_TRIPLE_CFLAGS :=
 LOCAL_MODULE := librsrt_mips.bc
 LOCAL_IS_HOST_MODULE := true
@@ -164,7 +183,11 @@ include $(CLEAR_VARS)
 # FIXME for 64-bit
 LOCAL_32_BIT_ONLY := true
 
+ifeq ($(TARGET_CPU_VARIANT),arm11)
+BCC_RS_TRIPLE := armv6-none-linux-gnueabi
+else
 BCC_RS_TRIPLE := armv7-none-linux-gnueabi
+endif
 RS_TRIPLE_CFLAGS := -D__i386__
 LOCAL_MODULE := librsrt_x86.bc
 LOCAL_IS_HOST_MODULE := true
